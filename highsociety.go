@@ -80,6 +80,14 @@ type GameState struct {
 	deck    []*Card
 }
 
+func (game *GameState) GameOver() bool {
+	return false
+}
+
+func (game *GameState) CurrentPlayer() int {
+	return 0
+}
+
 // NewGame creates a new game state
 func NewGame(numUsers int) *GameState {
 	players := make([]*PlayerState, numUsers)
