@@ -32,21 +32,6 @@ func (p *PlayerState) Balance() int {
 	return sum
 }
 
-func removeMin(arr []int) []int {
-	minIdx := 0
-	min := arr[0]
-
-	for i, x := range arr[1:len(arr)] {
-		if x < min {
-			min, minIdx = x, i+1
-		}
-	}
-
-	arr[minIdx], arr[len(arr)-1] = arr[len(arr)-1], arr[minIdx]
-
-	return arr[0 : len(arr)-1]
-}
-
 // Status returns the current total status of the player
 func (p *PlayerState) Status() int {
 	status := 0
