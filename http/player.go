@@ -68,7 +68,6 @@ func (p *Player) handlePacket(packet Packet) error {
 	default:
 		return fmt.Errorf("unrecognized packet %T", packet)
 	}
-	return nil
 }
 
 func (p *Player) sendError(err error) error {
