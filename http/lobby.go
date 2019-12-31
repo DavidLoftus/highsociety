@@ -53,6 +53,8 @@ func (store *gameLobbyStore) NewLobby() (*gameLobby, error) {
 }
 
 func (store *gameLobbyStore) GetLobby(id string) *gameLobby {
+	store.mut.RLock()
+	defer store.mut.RUnlock()
 	return store.lobbies[id]
 }
 
