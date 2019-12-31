@@ -65,10 +65,8 @@ func (p *Player) handlePacket(packet Packet) error {
 }
 
 func (p *Player) sendError(err error) error {
-	return p.conn.WriteJSON(AnyPacket{
-		ErrorReportPacket{
-			Msg: err.Error(),
-		},
+	return p.writePacket(&ErrorReportPacket{
+		Msg: err.Error(),
 	})
 }
 
@@ -85,12 +83,12 @@ func (p *Player) Handle() (err error) {
 	}()
 
 	for {
-		var anyPacket AnyPacket
-		if err := p.conn.ReadJSON(&anyPacket); err != nil {
+		packet, err := p.readPacket()
+		if err != nil {
 			return errors.Wrap(err, "failed to read packet from websocket")
 		}
 
-		err := p.handlePacket(anyPacket.Packet)
+		err = p.handlePacket(packet)
 		if err != nil {
 			log.Printf("Error in handling packet from client %s: %v\n", p.conn.LocalAddr(), err)
 			if err := p.sendError(err); err != nil {
