@@ -55,7 +55,14 @@ func (p *Player) handlePacket(packet Packet) error {
 		err = lobby.AddPlayer(p)
 		return errors.Wrap(err, "uh oh, failed to add player to his own game")
 	case JoinGamePacket:
-
+		if p.lobby != nil {
+			return fmt.Errorf("already in lobby")
+		}
+		lobby := globalGameLobbyStore.GetLobby(packet.LobbyID)
+		if lobby == nil {
+			return fmt.Errorf("no such lobby exists")
+		}
+		return lobby.AddPlayer(p)
 	case ChangeNamePacket:
 		return p.SetName(packet.NewName)
 	default:
