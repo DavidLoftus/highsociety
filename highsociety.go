@@ -11,10 +11,9 @@ func getStartingNotes() []int {
 // PlayerState holds the state of each player
 type PlayerState struct {
 	notes         []int
-	luxuryCards   []*luxuryCard
-	prestigeCards []*prestigeCard
-	disgraceCards []*disgraceCard
-	multiplier    float64
+	luxuryCards   []luxuryCard
+	prestigeCards []prestigeCard
+	disgraceCards []disgraceCard
 }
 
 func newPlayer() *PlayerState {
@@ -62,7 +61,7 @@ func (p *PlayerState) Status() int {
 // GameState holds the state for an entire game
 type GameState struct {
 	players []*PlayerState
-	deck    []*Card
+	deck    []Card
 }
 
 func (game *GameState) GameOver() bool {

@@ -44,6 +44,6 @@ func (l luxuryCard) Status() int {
 }
 
 // NewDeck creates an array of unshuffled cards
-func NewDeck() []*Card {
-	return []*Card{}
+func NewDeck() []Card {
+	return []Card{}
 }
