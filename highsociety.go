@@ -65,7 +65,7 @@ type GameState struct {
 }
 
 func (game *GameState) GameOver() bool {
-	return false
+	return len(game.deck) == 0
 }
 
 func (game *GameState) CurrentPlayer() int {
