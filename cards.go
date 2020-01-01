@@ -21,7 +21,8 @@ type Card interface {
 	Type() CardType
 }
 
-type prestigeCard struct{}
+// Integer indicates which prestige card it is (for images)
+type prestigeCard int
 
 func (prestigeCard) Type() CardType {
 	return Prestige
