@@ -1,5 +1,7 @@
 package highsociety
 
+import "math/rand"
+
 func getStartingNotes() []int {
 	return []int{
 		1, 2, 3, 4, 5,
