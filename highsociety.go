@@ -32,30 +32,33 @@ func (p *PlayerState) Balance() int {
 }
 
 // Status returns the current total status of the player
-func (p *PlayerState) Status() int {
+func (p *PlayerState) Status() float64 {
 	status := 0
 
 	for _, card := range p.luxuryCards {
 		status += card.Status()
 	}
 
-	var scandaleCount uint = 0
+	multiplier := 1.0
+
+	// Prestige cards multiply status by 2
+	for _ = range p.prestigeCards {
+		multiplier *= 2
+	}
+
 	for _, card := range p.disgraceCards {
 		switch card.Type() {
 		case Scandale:
-			scandaleCount++
+			// Scandale cards halve the status
+			multiplier /= 2
 		case Passe:
+			// Passe cards reduce status by 5
 			status -= 5
 		}
 	}
-
-	// Multiply status by 2 for each prestige card
-	status <<= uint(len(p.prestigeCards))
-
-	// Divide status by 2 for each scandale card
-	status >>= scandaleCount
-
-	return status
+	// Multiplier is applied at very end
+	// Return a float64 since it could be a fraction
+	return float64(status) * multiplier
 }
 
 func (p *PlayerState) getFauxPas() Card {
