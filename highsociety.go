@@ -58,6 +58,67 @@ func (p *PlayerState) Status() int {
 	return status
 }
 
+func (p *PlayerState) getFauxPas() Card {
+	for i, card := range p.disgraceCards {
+		if card.Type() == FauxPas {
+			// Remove card from slice
+			l := len(p.disgraceCards)
+			p.disgraceCards[i] = p.disgraceCards[l-1]
+			p.disgraceCards = p.disgraceCards[:l-1]
+			return card
+		}
+	}
+	return nil
+}
+
+func (p *PlayerState) discard(card Card) {
+	// TODO: display card in some discard pile
+}
+
+func removeMinCard(cards []luxuryCard) (Card, []luxuryCard) {
+	i, minCard := 0, cards[0]
+	for j, card := range cards {
+		if card.Status() < minCard.Status() {
+			i, minCard = j, card
+		}
+	}
+	l := len(cards)
+
+	cards[i] = cards[l]
+	return minCard, cards[:l-1]
+}
+
+func (p *PlayerState) GiveCard(card Card) {
+	switch card.Type() {
+	case Luxury:
+		if fauxPass := p.getFauxPas(); fauxPass != nil {
+			p.discard(fauxPass)
+			p.discard(card)
+		} else {
+			p.luxuryCards = append(p.luxuryCards, card.(luxuryCard))
+		}
+	case Prestige:
+		p.prestigeCards = append(p.prestigeCards, card.(prestigeCard))
+	case FauxPas:
+		if len(p.luxuryCards) > 0 {
+			// Technically player is meant to choose here...
+			// For now lets just remove the smallest value card
+			var minCard Card
+			minCard, p.luxuryCards = removeMinCard(p.luxuryCards)
+
+			p.discard(card)
+			p.discard(minCard)
+
+			break
+		}
+		fallthrough
+	case Passe:
+		fallthrough
+	case Scandale:
+		p.disgraceCards = append(p.disgraceCards, card.(disgraceCard))
+	}
+}
+
 // GameState holds the state for an entire game
 type GameState struct {
 	players []*PlayerState
