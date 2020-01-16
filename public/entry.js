@@ -1,4 +1,4 @@
 /* entry for webpack */
 
-import './css/style.css';
-import './Main.jsx';
+require('./css/style.css');
+require('./Main.jsx');
