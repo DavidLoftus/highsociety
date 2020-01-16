@@ -15,6 +15,7 @@ const (
 	PacketErrorReport            = "ERROR_REPORT"
 
 	// Server Packets
+	PacketOk           = "OK"
 	PacketPlayerStatus = "PLAYER_STATUS"
 )
 
@@ -54,6 +55,8 @@ func (a AnyPacket) UnmarshalJSON(data []byte) error {
 		packet = new(ChangeNamePacket)
 	case PacketPlayerStatus:
 		packet = new(PlayerStatusPacket)
+	case PacketOk:
+		packet = new(OkPacket)
 	default:
 		return fmt.Errorf("unrecognised packet type: %q", wrapper.Type)
 	}
@@ -113,4 +116,11 @@ type PlayerStatusPacket struct {
 
 func (PlayerStatusPacket) GetType() PacketType {
 	return PacketPlayerStatus
+}
+
+type OkPacket struct {
+}
+
+func (OkPacket) GetType() PacketType {
+	return PacketOk
 }

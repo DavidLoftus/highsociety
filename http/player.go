@@ -100,10 +100,12 @@ func (p *Player) Handle() (err error) {
 			response = &ErrorReportPacket{err.Error()}
 		}
 
-		if response != nil {
-			if err := p.writePacket(response); err != nil {
-				return errors.Wrap(err, "failed to send packet to client")
-			}
+		if response == nil {
+			response = &OkPacket{}
+		}
+
+		if err := p.writePacket(response); err != nil {
+			return errors.Wrap(err, "failed to send packet to client")
 		}
 	}
 }
