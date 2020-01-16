@@ -8,10 +8,14 @@ import (
 type PacketType string
 
 const (
+	// Client Packets
 	PacketNewGame     PacketType = "NEW_GAME"
 	PacketJoinGame               = "JOIN_GAME"
 	PacketChangeName             = "CHANGE_NAME"
 	PacketErrorReport            = "ERROR_REPORT"
+
+	// Server Packets
+	PacketPlayerStatus = "PLAYER_STATUS"
 )
 
 type Packet interface {
@@ -48,6 +52,8 @@ func (a AnyPacket) UnmarshalJSON(data []byte) error {
 		packet = new(JoinGamePacket)
 	case PacketChangeName:
 		packet = new(ChangeNamePacket)
+	case PacketPlayerStatus:
+		packet = new(PlayerStatusPacket)
 	default:
 		return fmt.Errorf("unrecognised packet type: %q", wrapper.Type)
 	}
@@ -99,4 +105,12 @@ type ErrorReportPacket struct {
 
 func (ErrorReportPacket) GetType() PacketType {
 	return PacketErrorReport
+}
+
+type PlayerStatusPacket struct {
+	name string
+}
+
+func (PlayerStatusPacket) GetType() PacketType {
+	return PacketPlayerStatus
 }
