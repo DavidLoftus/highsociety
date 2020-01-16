@@ -14,6 +14,7 @@ type gameLobby struct {
 }
 
 func (lobby *gameLobby) AddPlayer(player *Player) error {
+	// TODO: careful we aren't locking when game has started
 	lobby.mut.Lock()
 	defer lobby.mut.Unlock()
 
@@ -23,6 +24,9 @@ func (lobby *gameLobby) AddPlayer(player *Player) error {
 	lobby.players = append(lobby.players, player)
 
 	return nil
+}
+
+func (lobby *gameLobby) StartGame() {
 }
 
 type gameLobbyStore struct {
