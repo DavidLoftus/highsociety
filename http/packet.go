@@ -32,7 +32,7 @@ type packetWrapper struct {
 	Msg  interface{} `json:"msg"`
 }
 
-func (a AnyPacket) UnmarshalJSON(data []byte) error {
+func (a *AnyPacket) UnmarshalJSON(data []byte) error {
 	// RawMessage to store packet contents
 	var msg json.RawMessage
 

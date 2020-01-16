@@ -48,7 +48,7 @@ func (p *Player) writePacket(packet Packet) error {
 
 func (p *Player) handlePacket(packet Packet) (Packet, error) {
 	switch packet := packet.(type) {
-	case NewGamePacket:
+	case *NewGamePacket:
 		if p.lobby != nil {
 			return nil, fmt.Errorf("already in lobby")
 		}
@@ -58,7 +58,7 @@ func (p *Player) handlePacket(packet Packet) (Packet, error) {
 		}
 		err = lobby.AddPlayer(p)
 		return nil, errors.Wrap(err, "uh oh, failed to add player to his own game")
-	case JoinGamePacket:
+	case *JoinGamePacket:
 		if p.lobby != nil {
 			return nil, fmt.Errorf("already in lobby")
 		}
@@ -67,7 +67,7 @@ func (p *Player) handlePacket(packet Packet) (Packet, error) {
 			return nil, fmt.Errorf("no such lobby exists")
 		}
 		return nil, lobby.AddPlayer(p)
-	case ChangeNamePacket:
+	case *ChangeNamePacket:
 		return nil, p.SetName(packet.NewName)
 	default:
 		return nil, fmt.Errorf("unrecognized packet %T", packet)
