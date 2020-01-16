@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
 	"log"
+	"math/rand"
 	"sync"
 )
 
@@ -16,9 +17,12 @@ type Player struct {
 }
 
 func NewPlayer(conn *websocket.Conn) *Player {
-	return &Player{
+	player := &Player{
 		conn: conn,
+		name: fmt.Sprintf("Guest#%04d", rand.Intn(10000)),
 	}
+	//player.sendStatus()
+	return player
 }
 
 func (p *Player) SetName(name string) error {
