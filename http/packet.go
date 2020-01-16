@@ -87,7 +87,7 @@ func (NewGamePacket) GetType() PacketType {
 }
 
 type JoinGamePacket struct {
-	LobbyID string
+	LobbyID string `json:"lobby_id"`
 }
 
 func (JoinGamePacket) GetType() PacketType {
@@ -95,7 +95,7 @@ func (JoinGamePacket) GetType() PacketType {
 }
 
 type ChangeNamePacket struct {
-	NewName string
+	NewName string `json:"new_name"`
 }
 
 func (ChangeNamePacket) GetType() PacketType {
@@ -103,7 +103,7 @@ func (ChangeNamePacket) GetType() PacketType {
 }
 
 type ErrorReportPacket struct {
-	Msg string
+	Msg string `json:"msg"`
 }
 
 func (ErrorReportPacket) GetType() PacketType {
@@ -111,7 +111,7 @@ func (ErrorReportPacket) GetType() PacketType {
 }
 
 type PlayerStatusPacket struct {
-	name string
+	Name string `json:"name"`
 }
 
 func (PlayerStatusPacket) GetType() PacketType {
