@@ -12,13 +12,23 @@ module.exports = {
         path: path.resolve(__dirname, 'static/js'),
     },
     module: {
-        loaders: [
-            {test: /\.css$/, loader: "style!css"},
+        rules: [
+            { test: /\.css$/, use: 'css-loader' },
             {
-                test: /\.jsx$/,
-                loaders: ['react-hot', 'babel'],
-                include: [path.join(__dirname, 'public')]
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ['@babel/react'],
+                    },
+                }
             }
+            // {
+            //     test: /\.jsx$/,
+            //     loaders: ['react-hot', 'babel'],
+            //     include: [path.join(__dirname, 'public')]
+            // }
         ]
     },
 };
