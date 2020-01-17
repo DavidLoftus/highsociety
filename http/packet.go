@@ -9,13 +9,13 @@ type PacketType string
 
 const (
 	// Client Packets
-	PacketNewGame     PacketType = "NEW_GAME"
-	PacketJoinGame               = "JOIN_GAME"
-	PacketChangeName             = "CHANGE_NAME"
-	PacketErrorReport            = "ERROR_REPORT"
+	PacketNewGame    PacketType = "NEW_GAME"
+	PacketJoinGame              = "JOIN_GAME"
+	PacketChangeName            = "CHANGE_NAME"
 
 	// Server Packets
 	PacketOk           = "OK"
+	PacketErrorReport  = "ERROR_REPORT"
 	PacketPlayerStatus = "PLAYER_STATUS"
 )
 
