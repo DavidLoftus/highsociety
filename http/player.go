@@ -92,17 +92,22 @@ func (p *Player) Handle() (err error) {
 			return errors.Wrap(err, "failed to read packet from websocket")
 		}
 
+		reqHeader := packet.Header()
+
 		response, err := p.handlePacket(packet)
 		if err != nil {
 			log.Printf("Error in handling packet from client %s: %v\n", p.conn.LocalAddr(), err)
 
 			// We should send an error packet
-			response = &ErrorReportPacket{err.Error()}
+			response = &ErrorReportPacket{Msg: err.Error()}
 		}
 
 		if response == nil {
 			response = &OkPacket{}
 		}
+
+		respHeader := response.Header()
+		respHeader.Id = reqHeader.Id
 
 		if err := p.writePacket(response); err != nil {
 			return errors.Wrap(err, "failed to send packet to client")

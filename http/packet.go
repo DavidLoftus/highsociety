@@ -19,8 +19,17 @@ const (
 	PacketPlayerStatus = "PLAYER_STATUS"
 )
 
+type PacketHeader struct {
+	Id int `json:"id"`
+}
+
+func (p *PacketHeader) Header() *PacketHeader {
+	return p
+}
+
 type Packet interface {
 	GetType() PacketType
+	Header() *PacketHeader
 }
 
 type AnyPacket struct {
@@ -80,6 +89,7 @@ func (a AnyPacket) MarshalJSON() ([]byte, error) {
 }
 
 type NewGamePacket struct {
+	PacketHeader
 }
 
 func (NewGamePacket) GetType() PacketType {
@@ -87,6 +97,7 @@ func (NewGamePacket) GetType() PacketType {
 }
 
 type JoinGamePacket struct {
+	PacketHeader
 	LobbyID string `json:"lobby_id"`
 }
 
@@ -95,6 +106,7 @@ func (JoinGamePacket) GetType() PacketType {
 }
 
 type ChangeNamePacket struct {
+	PacketHeader
 	NewName string `json:"new_name"`
 }
 
@@ -103,6 +115,7 @@ func (ChangeNamePacket) GetType() PacketType {
 }
 
 type ErrorReportPacket struct {
+	PacketHeader
 	Msg string `json:"msg"`
 }
 
@@ -111,6 +124,7 @@ func (ErrorReportPacket) GetType() PacketType {
 }
 
 type PlayerStatusPacket struct {
+	PacketHeader
 	Name string `json:"name"`
 }
 
@@ -119,6 +133,7 @@ func (PlayerStatusPacket) GetType() PacketType {
 }
 
 type OkPacket struct {
+	PacketHeader
 }
 
 func (OkPacket) GetType() PacketType {
