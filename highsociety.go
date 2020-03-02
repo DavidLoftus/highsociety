@@ -124,18 +124,52 @@ func (p *PlayerState) GiveCard(card Card) {
 	}
 }
 
+type PlayerInput interface {
+	GetBid() (bool, []int)
+}
+
 // GameState holds the state for an entire game
 type GameState struct {
-	players []*PlayerState
-	deck    []Card
+	players       []*PlayerState
+	input         []PlayerInput
+	deck          []Card
+	currentPlayer int
 }
 
-func (game *GameState) GameOver() bool {
-	return len(game.deck) == 0
-}
+func (game *GameState) startBid(card Card) int {
+	passCount := 0
+	passes := make([]bool, len(game.players))
 
-func (game *GameState) CurrentPlayer() int {
+	bids := make([][]int, len(game.players))
+
+	maxBid := 0
+
+	for passCount < len(game.players)-1 {
+		pass, bid := game.input[game.currentPlayer].GetBid()
+		if pass {
+			passes[game.currentPlayer] = true
+			passCount += 1
+		} else {
+			bids[game.currentPlayer] = append(bids[game.currentPlayer], bid...)
+			bidSum := 0
+			for _, val := range bids[game.currentPlayer] {
+				bidSum += val
+			}
+
+			if bidSum > maxBid {
+				maxBid = bidSum
+			}
+		}
+		game.currentPlayer = (game.currentPlayer + 1) % len(game.players)
+	}
+
 	return 0
+}
+
+func (game *GameState) Play() {
+	for _, card := range game.deck {
+		game.startBid(card)
+	}
 }
 
 // NewGame creates a new game state
