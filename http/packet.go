@@ -17,6 +17,8 @@ const (
 	PacketOk           = "OK"
 	PacketErrorReport  = "ERROR_REPORT"
 	PacketPlayerStatus = "PLAYER_STATUS"
+
+	PacketArbitrary = "ARBITRARY"
 )
 
 type PacketHeader struct {
@@ -138,4 +140,13 @@ type OkPacket struct {
 
 func (OkPacket) GetType() PacketType {
 	return PacketOk
+}
+
+type ArbitraryPacket struct {
+	PacketHeader
+	Data map[string]interface{} `json:"data"`
+}
+
+func (ArbitraryPacket) GetType() PacketType {
+	return PacketArbitrary
 }
