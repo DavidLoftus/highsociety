@@ -1,11 +1,9 @@
 import React from 'react';
 
-class NameForm extends React.Component {
+class TextForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {value: ''};
-
-        this.submitCallback = props.onSubmit;
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -16,7 +14,7 @@ class NameForm extends React.Component {
     }
 
     handleSubmit(event) {
-        this.submitCallback(this.state.value);
+        this.props.onSubmit(this.state.value);
         event.preventDefault();
     }
 
@@ -24,7 +22,7 @@ class NameForm extends React.Component {
         return (
             <form onSubmit={this.handleSubmit}>
                 <label>
-                    Name:
+                    {this.props.prompt}
                     <input type="text" value={this.state.value} onChange={this.handleChange} />
                 </label>
                 <input type="submit" value="Submit" />
@@ -33,4 +31,4 @@ class NameForm extends React.Component {
     }
 }
 
-export default NameForm;
+export default TextForm;

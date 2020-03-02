@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import NameForm from './NameForm.jsx';
+import TextForm from './TextForm.jsx';
 
 class Main extends React.Component {
 
@@ -10,7 +10,9 @@ class Main extends React.Component {
         this.promises = {};
         this.ws = new WebSocket(`ws://${location.host}/ws/`);
         this.state = {
-            name: '?'
+            name: '?',
+            dataFromServer: '',
+            isInGame: false,
         };
     }
 
@@ -74,13 +76,39 @@ class Main extends React.Component {
         this.setState({name: name});
     }
 
+    async createGame() {
+        const resp = await this.sendPacket('NEW_GAME', {});
+        this.setState({
+            isInGame: true,
+            lobbyId: resp.data.lobby_id,
+        });
+    }
+
+    async joinGame(id) {
+        await this.sendPacket('JOIN_GAME', {
+            lobby_id: id,
+        });
+        this.setState({
+            isInGame: true,
+            lobbyId: id,
+        });
+    }
+
     render() {
-        return (<div>
-            <h>Hello {this.state.name}</h>
-            <br/>
-            <NameForm onSubmit={name => this.changeName(name)}/>
-            <b>{JSON.stringify(this.state.dataFromServer)}</b>
-        </div>);
+        if (!this.state.isInGame) {
+            return (<div>
+                <h>Hello {this.state.name}</h>
+                <TextForm prompt="Name: " onSubmit={name => this.changeName(name)}/>
+                <button onClick={() => this.createGame()}>Create Game</button>
+                <TextForm prompt="Join Game: " onSubmit={id => this.joinGame(id)}/>
+            </div>);
+        } else {
+            return (<div>
+                <h>Hello {this.state.name}</h>
+                <TextForm prompt="Name: " onSubmit={name => this.changeName(name)}/>
+                <label>Lobby: {this.state.lobbyId}</label>
+            </div>);
+        }
     }
 }
 
